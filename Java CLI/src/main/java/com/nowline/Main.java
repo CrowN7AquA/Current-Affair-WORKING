@@ -11,6 +11,7 @@ public class Main {
     private static final QuizService quiz = new QuizService();
     private static final BookmarkService bookmarks = new BookmarkService();
     private static final SettingsService settings = new SettingsService();
+    private static final AdminService admin = new AdminService();
 
     public static void main(String[] args) {
     databasePassword = System.getenv("NOWLINE_DB_PASSWORD");
@@ -20,6 +21,11 @@ public class Main {
             char[] password = System.console().readPassword(
                 "Enter MySQL password: "
             );
+
+            if (password == null) {
+    System.out.println("Password input cancelled.");
+    return;
+}
 
             databasePassword = new String(password);
             Arrays.fill(password, '\0');
@@ -44,21 +50,41 @@ public class Main {
     }
 
     private static void accountMenu() {
-        while (true) {
-            System.out.println("\n========== ACCOUNT ==========");
-            System.out.println("1. Login\n2. Register\n3. Exit");
-            int choice = readChoice();
-            if (choice == 3) return;
-            if (choice == 1) {
-                User user = auth.login(sc);
-                if (user != null) dashboard(user);
-            } else if (choice == 2) {
-                auth.register(sc);
-            } else {
-                System.out.println("Invalid choice.");
+
+    while (true) {
+
+        System.out.println("\n========== ACCOUNT ==========");
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.println("3. Exit");
+
+        int choice = readChoice();
+
+        if (choice == 3) return;
+
+        if (choice == 1) {
+
+            User user = auth.login(sc);
+
+            if (user != null) {
+
+                if (user.getId() == -1) {
+                    admin.menu(sc);
+                } else {
+                    dashboard(user);
+                }
             }
+
+        } else if (choice == 2) {
+
+            auth.register(sc);
+
+        } else {
+
+            System.out.println("Invalid choice.");
         }
     }
+}
 
     private static void dashboard(User user) {
         while (true) {

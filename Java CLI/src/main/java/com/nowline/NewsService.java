@@ -1,11 +1,20 @@
 package com.nowline;
 
 import java.net.URI;
-import java.net.http.*;
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.*;
-import org.json.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class NewsService {
     private final Map<Integer, Article> currentArticles = new HashMap<>();
@@ -69,8 +78,11 @@ public class NewsService {
         }
         try {
             String query;
-            if (category.equals("top") || category.equals("national"))
-                query = "https://newsapi.org/v2/top-headlines?country=in&pageSize=10&apiKey=" + apiKey;
+            if (category.equals("top"))
+                query = "https://newsapi.org/v2/everything?q=India&language=en&sortBy=publishedAt&pageSize=10&apiKey=" + apiKey;
+
+            else if (category.equals("national"))
+                query = "https://newsapi.org/v2/everything?q=India&language=en&sortBy=relevancy&pageSize=10&apiKey=" + apiKey;
             else {
                 String term = category.startsWith("search:") ? category.substring(7) : category;
                 if (term.equals("international")) term = "world";
