@@ -104,7 +104,6 @@ public class Main {
             System.out.println("12. Bookmarks");
             System.out.println("13. Settings");
             System.out.println("14. Logout");
-            System.out.println("15. News processing demonstration");
 
             int choice = readChoice();
             if (choice == 14) return;
@@ -122,7 +121,6 @@ public class Main {
                 case 11 -> quiz.start(user.getId(), sc);
                 case 12 -> bookmarks.menu(user.getId(), sc);
                 case 13 -> settings.menu(user.getId(), sc);
-                case 15 -> new NewsProcessor().processDemo();
                 default -> System.out.println("Invalid choice.");
             }
         }
